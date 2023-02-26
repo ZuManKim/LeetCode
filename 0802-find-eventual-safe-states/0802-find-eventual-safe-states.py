@@ -2,7 +2,7 @@ class Solution:
     def eventualSafeNodes(self, graph: List[List[int]]) -> List[int]:
         safe_nodes = [False] * len(graph)
         outbound = [set(out) for out in graph]
-        inbound = [set() for _ in graph]
+        inbound = [set() for _ in range(len(graph))]
         queue = collections.deque()
         
         for i, outgoing in enumerate(outbound):
