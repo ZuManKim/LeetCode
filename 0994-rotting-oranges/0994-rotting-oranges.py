@@ -1,37 +1,35 @@
 class Solution:
     def orangesRotting(self, grid: List[List[int]]) -> int:
-        m = len(grid)
-        n = len(grid[0])
-        
-        fresh_cnt, num_min = 0, 0
+        fresh = 0
         rotten = deque()
+        r, c = len(grid), len(grid[0])
         
-        for i in range(m):
-            for j in range(n):
-                if grid[i][j] == 1:
-                    fresh_cnt += 1
-                elif grid[i][j] == 2:
+        for i in range(r):
+            for j in range(c):
+                if grid[i][j] == 2:
                     rotten.append((i, j))
+                elif grid[i][j] == 1:
+                    fresh += 1
         
-        while rotten and fresh_cnt > 0:
-            num_min += 1
-            
+        minutes = 0
+        
+        while rotten and fresh:    
             for _ in range(len(rotten)):
-                x, y  = rotten.popleft()
+                x, y = rotten.popleft()
                 
-                for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+                for dx, dy in [(-1, 0), (0, -1), (1, 0), (0, 1)]:
                     xx, yy = x + dx, y + dy
                     
-                    if xx < 0 or xx == m or yy < 0 or yy == n:
+                    if xx < 0 or yy < 0 or xx >= r or yy >= c: 
                         continue
                     
-                    if grid[xx][yy] in [0, 2]:
-                        continue
-                    
-                    rotten.append((xx, yy))
-                    fresh_cnt -= 1
-                    grid[xx][yy] = 2
+                    if grid[xx][yy] == 1:
+                        grid[xx][yy] = 2
+                        fresh -= 1
+                        rotten.append((xx, yy))
+            
+            minutes += 1
         
-        return -1 if fresh_cnt > 0 else num_min
+        return minutes if not fresh else -1
         
                 
